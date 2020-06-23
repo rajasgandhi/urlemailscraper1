@@ -37,14 +37,14 @@ async def logic(urls):
     new_loop=asyncio.new_event_loop()
     asyncio.set_event_loop(new_loop)
     session = AsyncHTMLSession()
-    browser = await launch()
-    '''ignoreHTTPSErrors':True, 
+    browser = await launch({
+    ignoreHTTPSErrors':True, 
         'headless':True, 
         'handleSIGINT':False, 
         'handleSIGTERM':False, 
-        'handleSIGHUP':False
-        #'args': ['--no-sandbox', '--disable-setuid-sandbox']
-    })'''
+        'handleSIGHUP':False,
+        'args': ['--no-sandbox', '--disable-setuid-sandbox']
+    })
     session._browser = browser
     urls1=urls.split(',')
     emails1=[]
