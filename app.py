@@ -28,7 +28,10 @@ async def api():
     elif url is None:
         return jsonify("Invalid Response", "Make sure URL is present!")
     else:
-        return jsonify(await logic(url))
+        try:
+            return jsonify(await logic(url))
+        except:
+            return jsonify("Invalid Response", "Make sure URL is in proper format!")
 
 async def logic(urls):
     new_loop=asyncio.new_event_loop()
@@ -46,16 +49,7 @@ async def logic(urls):
     urls1=urls.split(',')
     emails1=[]
     for url in urls1:
-        url=str(url)
-        if (url.startswith("http://")):
-            continue
-        elif (url.startswith("https://")):
-            url = "http://" + url[8:]
-        else:
-            url = "http://" + url
-        r = await session.get(url)
-        await r.html.arender()
-        emails=re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", r.html.html)
+        emails=await fetch(url, session)
         for email in emails:
             emails1.append(email)
     
@@ -65,6 +59,18 @@ async def logic(urls):
 
     return emails1
 
+async def fetch(url, session):
+    url=str(url).lower()
+    if (url.startswith("https://")):
+        url = "http://" + url[8:]
+        print (url)
+    elif (url.startswith("http://")):
+        pass
+    else:
+        url = "http://" + url
+    r = await session.get(url)
+    await r.html.arender()
+    return re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", r.html.html)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=os.environ.get('PORT',5000))

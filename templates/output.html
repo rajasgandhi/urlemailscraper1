@@ -22,12 +22,15 @@
 					<hr />
 					{% block content %}
 						{% if length  %}
-                    		<h2>Here is the email addresses found:</h2>
+							<h2>Here are the email addresses found:</h2>
+								<p>List:</p>
                     			<ul>
                         			{% for email in emails: %}
                             		<li>{{ email }}</li><br>
                         			{% endfor %}
 								</ul>
+								<p>Raw JSON:</p>
+								{{ emails }}
 						{% else %}
 								<h2>No email addresses were found</h2>
 						{% endif %}
