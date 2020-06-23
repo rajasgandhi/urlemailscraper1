@@ -60,6 +60,7 @@ async def logic(urls):
 
         return emails1
     except:
+        print("error")
         falseret=[]
         return falseret
 
