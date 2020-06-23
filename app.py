@@ -34,30 +34,34 @@ async def api():
             return jsonify("Invalid Response", "Make sure URL is in proper format!")
 
 async def logic(urls):
-    new_loop=asyncio.new_event_loop()
-    asyncio.set_event_loop(new_loop)
-    session = AsyncHTMLSession()
-    browser = await launch({
-        'ignoreHTTPSErrors':True, 
-        'headless':True, 
-        'handleSIGINT':False, 
-        'handleSIGTERM':False, 
-        'handleSIGHUP':False,
-        'args': ['--no-sandbox', '--disable-setuid-sandbox']
-    })
-    session._browser = browser
-    urls1=urls.split(',')
-    emails1=[]
-    for url in urls1:
-        emails=await fetch(url, session)
-        for email in emails:
-            emails1.append(email)
-    
-    for i in range(len(emails1)):
-        if(i % 2 == 1):
-            emails1.pop(i-1)
+    try:
+        new_loop=asyncio.new_event_loop()
+        asyncio.set_event_loop(new_loop)
+        session = AsyncHTMLSession()
+        browser = await launch({
+            'ignoreHTTPSErrors':True, 
+            'headless':True, 
+            'handleSIGINT':False, 
+            'handleSIGTERM':False, 
+            'handleSIGHUP':False,
+            'args': ['--no-sandbox', '--disable-setuid-sandbox']
+        })
+        session._browser = browser
+        urls1=urls.split(',')
+        emails1=[]
+        for url in urls1:
+            emails=await fetch(url, session)
+            for email in emails:
+                emails1.append(email)
+        
+        for i in range(len(emails1)):
+            if(i % 2 == 1):
+                emails1.pop(i-1)
 
-    return emails1
+        return emails1
+    except:
+        falseret=[]
+        return falseret
 
 async def fetch(url, session):
     url=str(url).lower()
