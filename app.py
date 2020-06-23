@@ -73,5 +73,5 @@ async def fetch(url, session):
     return re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", r.html.html)
 
 if __name__ == "__main__":
-    #app.run(host='0.0.0.0', int(port=os.environ.get('PORT',5000)))
-    app.run(debug=True)
+    app.run(host='0.0.0.0', int(port=os.environ.get('PORT',5000)))
+    #app.run(debug=True)
