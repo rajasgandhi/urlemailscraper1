@@ -3,7 +3,7 @@ from quart import Quart, render_template, jsonify, request
 import re
 from requests_html import AsyncHTMLSession
 import asyncio
-from pyppeteer import launch
+#from pyppeteer import launch
 
 app = Quart(__name__)
 
