@@ -28,7 +28,8 @@ async def logic(urls):
         'headless':True, 
         'handleSIGINT':False, 
         'handleSIGTERM':False, 
-        'handleSIGHUP':False
+        'handleSIGHUP':False,
+        'args': ['--no-sandbox', '--disable-setuid-sandbox'],
     })
     session._browser = browser
     r = await session.get(urls)
