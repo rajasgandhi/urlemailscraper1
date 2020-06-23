@@ -32,6 +32,10 @@ async def logic(urls):
         'args': ['--no-sandbox', '--disable-setuid-sandbox']
     })
     session._browser = browser
+    if (urls.startswith("https://")):
+        urls = "http://" + urls[7:]
+    if (not urls.startswith("http://")):
+        urls = "http://" + urls
     r = await session.get(urls)
     await r.html.arender()
 
