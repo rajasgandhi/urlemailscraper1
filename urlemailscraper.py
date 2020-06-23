@@ -23,14 +23,14 @@ async def logic(urls):
     new_loop=asyncio.new_event_loop()
     asyncio.set_event_loop(new_loop)
     session = AsyncHTMLSession()
-    browser = await launch()
+    #browser = await launch()
     '''ignoreHTTPSErrors':True, 
         'headless':True, 
         'handleSIGINT':False, 
         'handleSIGTERM':False, 
         'handleSIGHUP':False
     })'''
-    session._browser = browser
+    #session._browser = browser
     r = await session.get(urls)
     await r.html.arender()
 
@@ -47,4 +47,4 @@ async def api():
         return await jsonify(logic(domains))
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=os.environ.get('PORT',5000))
