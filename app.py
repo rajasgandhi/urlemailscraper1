@@ -59,8 +59,8 @@ async def logic(urls):
                 emails1.pop(i-1)
 
         return emails1
-    except:
-        print("error")
+    except Exception as e:
+        print(e)
         falseret=[]
         return falseret
 
