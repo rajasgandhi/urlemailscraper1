@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Email Scraper</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static',filename='styles/assets/css/main.css') }}" />
+		<noscript><link rel="stylesheet" href="{{ url_for('static',filename='styles/assets/css/noscript.css') }}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<section id="main">
+						<header>
+							<span class="avatar"><img src="{{ url_for('static',filename='styles/images/avatar.jpg') }}" alt="" /></span>
+							<h1>Email Scraper</h1>
+						</header>
+						
+						<hr />
+						<h2>Enter URL!</h2>
+						<form name="form" method="post" action="{{ url_for('output') }}">
+							<div class="fields">
+								<div class="field">
+									<input required type="text" name="url" id="URL" placeholder="URL" />
+								</div>
+								<div class="field">
+									<input type="submit" class="button" value="Submit">
+								</div>
+							</div>
+						</form>
+						<hr />
+					</section>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<ul class="copyright">
+							
+						</ul>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-preload\b/, ''); });
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+
+	</body>
+</html>
