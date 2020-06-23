@@ -3,7 +3,7 @@ from quart import Quart, render_template, jsonify, request
 import re
 from requests_html import AsyncHTMLSession
 import asyncio
-#from pyppeteer import launch
+from pyppeteer import launch
 
 app = Quart(__name__)
 
@@ -23,14 +23,14 @@ async def logic(urls):
     new_loop=asyncio.new_event_loop()
     asyncio.set_event_loop(new_loop)
     session = AsyncHTMLSession()
-    #browser = await launch()
-    '''ignoreHTTPSErrors':True, 
+    browser = await launch({
+        'ignoreHTTPSErrors':True, 
         'headless':True, 
         'handleSIGINT':False, 
         'handleSIGTERM':False, 
         'handleSIGHUP':False
-    })'''
-    #session._browser = browser
+    })
+    session._browser = browser
     r = await session.get(urls)
     await r.html.arender()
 
