@@ -31,8 +31,7 @@ async def api():
         return {"Invalid Response": "Make sure URL is present!"}
     else:
         try:
-            return await logic(url)
-            #return {"Invalid Response":"test"}
+            return jsonify(await logic(url))
         except:
             return {"Invalid Response": "Make sure URL is in proper format!"}
 
