@@ -23,16 +23,16 @@ async def output():
 
 @app.route("/api", methods=['GET'])
 async def api():
-    url=str(request.args.get('url'))
-    apikey=str(request.args.get('apikey'))
+    url=request.args.get('url')
+    apikey=request.args.get('apikey')
     if apikey is None:
         return {"Invalid Response":"Make sure API key is present!"}
     elif url is None:
         return {"Invalid Response": "Make sure URL is present!"}
     else:
         try:
-            #return await logic(url)
-            return {"Invalid Response":"test"}
+            return await logic(url)
+            #return {"Invalid Response":"test"}
         except:
             return {"Invalid Response": "Make sure URL is in proper format!"}
 
@@ -84,5 +84,5 @@ async def fetch(url, session):
     return re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", r.html.html)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT',5000)))
-    #app.run(debug=True)
+    #app.run(host='0.0.0.0', port=int(os.environ.get('PORT',5000)))
+    app.run(debug=True)
