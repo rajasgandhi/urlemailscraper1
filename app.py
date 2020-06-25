@@ -26,15 +26,15 @@ async def api():
     url=request.args.get('url')
     apikey=request.args.get('apikey')
     if apikey is None:
-        return jsonify("Invalid Response", "Make sure API key is present!")
+        return {"Invalid Response":"Make sure API key is present!"}
     elif url is None:
-        return jsonify("Invalid Response", "Make sure URL is present!")
+        return {"Invalid Response": "Make sure URL is present!"}
     else:
         try:
             emails = await(logic(url))
             return emails
         except:
-            return jsonify("Invalid Response", "Make sure URL is in proper format!")
+            return {"Invalid Response": "Make sure URL is in proper format!"}
 
 async def logic(urls):
     try:
