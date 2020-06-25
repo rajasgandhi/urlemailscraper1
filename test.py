@@ -47,7 +47,7 @@ async def api():
         return {"Invalid Response": "Make sure URL is present!"}
     else:
         try:
-            emails = await(logic(url))
+            emails = await logic(url)
             return emails
         except:
             return {"Invalid Response": "Make sure URL is in proper format!"}
