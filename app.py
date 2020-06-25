@@ -7,6 +7,8 @@ from pyppeteer import launch
 
 app = Quart(__name__)
 
+returndict = {}
+
 @app.route("/")
 @app.route("/index")
 async def main():
@@ -16,8 +18,8 @@ async def main():
 async def output():
     form = await request.form
     domains = form['url']
-    
-    return await render_template('output.html', emails = await logic(domains), length=(len(await logic(domains)) != 0))
+    emails = await logic(domains)
+    return await render_template('output.html', emails = emails, length=(len(emails) != 0))
 
 @app.route("/api", methods=['GET'])
 async def api():
@@ -29,7 +31,8 @@ async def api():
         return jsonify("Invalid Response", "Make sure URL is present!")
     else:
         try:
-            return jsonify(await logic(url))
+            emails = await(logic(url))
+            return emails
         except:
             return jsonify("Invalid Response", "Make sure URL is in proper format!")
 
@@ -58,7 +61,10 @@ async def logic(urls):
             if(i % 2 == 1):
                 emails1.pop(i-1)
 
-        return emails1
+        for i in range(len(emails1)):
+            returndict.update({'email' + str(i+1):emails1[i]})
+
+        return returndict
     except Exception as e:
         print(e)
         falseret=[]

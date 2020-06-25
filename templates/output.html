@@ -25,12 +25,12 @@
 							<h2>Here are the email addresses found:</h2>
 								<p>List:</p>
                     			<ul>
-                        			{% for email in emails: %}
-                            		<li>{{ email }}</li><br>
+                        			{% for key, value in emails.items(): %}
+                            		<li>{{ value }}</li><br>
                         			{% endfor %}
 								</ul>
 								<p>Raw JSON:</p>
-								{{ emails }}
+								<p>{{ emails }}</p>
 						{% else %}
 								<h2>No email addresses were found</h2>
 						{% endif %}

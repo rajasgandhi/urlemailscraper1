@@ -14,32 +14,6 @@ if (domain2.startswith("https://")):
     domain2 = "http://" + domain[7:]
 print (domain2)'''
 
-'''from requests_html import AsyncHTMLSession
-import asyncio
-import pyppeteer
-import pytest
-   
-@pytest.mark.asyncio
-async def get_post():
-    new_loop=asyncio.new_event_loop()
-    asyncio.set_event_loop(new_loop)
-    session = AsyncHTMLSession()
-    browser = await pyppeteer.launch({ 
-        'ignoreHTTPSErrors':True, 
-        'headless':True, 
-        'handleSIGINT':False, 
-        'handleSIGTERM':False, 
-        'handleSIGHUP':False
-    })
-    session._browser = browser
-    resp_page = await session.get('https://python.org')
-    await resp_page.html.arender()
-    return resp_page
-
-get_post()
-
-<!--{% for email in emails: %}-->
-<!--{% endfor %}-->'''
 import os
 from quart import Quart, render_template, jsonify, request
 import re
@@ -48,6 +22,8 @@ import asyncio
 from pyppeteer import launch
 
 app = Quart(__name__)
+
+returndict = {}
 
 @app.route("/")
 @app.route("/index")
@@ -58,8 +34,8 @@ async def main():
 async def output():
     form = await request.form
     domains = form['url']
-    
-    return await render_template('output.html', emails = await logic(domains), length=(len(await logic(domains)) != 0))
+    emails = await logic(domains)
+    return await render_template('output.html', emails = emails, length=(len(emails) != 0))
 
 @app.route("/api", methods=['GET'])
 async def api():
@@ -70,47 +46,59 @@ async def api():
     elif url is None:
         return jsonify("Invalid Response", "Make sure URL is present!")
     else:
-        return jsonify(await logic(url))
+        try:
+            emails = await(logic(url))
+            return emails
+        except:
+            return jsonify("Invalid Response", "Make sure URL is in proper format!")
 
 async def logic(urls):
-    new_loop=asyncio.new_event_loop()
-    asyncio.set_event_loop(new_loop)
-    session = AsyncHTMLSession()
-    browser = await launch({
-        'ignoreHTTPSErrors':True, 
-        'headless':True, 
-        'handleSIGINT':False, 
-        'handleSIGTERM':False, 
-        'handleSIGHUP':False,
-        'args': ['--no-sandbox', '--disable-setuid-sandbox']
-    })
-    session._browser = browser
-    urls1=urls.split(',')
-    emails1=[]
-    for url in urls1:
-        url=str(url)
-        if (url.startswith("http://")):
-            continue
-        elif (url.startswith("https://")):
-            url = "http://" + url[8:]
-            print("false")
-        else:
-            url = "http://" + url
-            print("true")
-        print(url)
-        r = await session.get(url)
-        await r.html.arender()
-        emails=re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", r.html.html)
-        for email in emails:
-            emails1.append(email)
-    
-    for i in range(len(emails1)):
-        if(i % 2 == 1):
-            emails1.pop(i-1)
+    try:
+        new_loop=asyncio.new_event_loop()
+        asyncio.set_event_loop(new_loop)
+        session = AsyncHTMLSession()
+        browser = await launch({
+            'ignoreHTTPSErrors':True, 
+            'headless':True, 
+            'handleSIGINT':False, 
+            'handleSIGTERM':False, 
+            'handleSIGHUP':False,
+            'args': ['--no-sandbox', '--disable-setuid-sandbox']
+        })
+        session._browser = browser
+        urls1=urls.split(',')
+        emails1=[]
+        for url in urls1:
+            emails=await fetch(url, session)
+            for email in emails:
+                emails1.append(email)
+        
+        for i in range(len(emails1)):
+            if(i % 2 == 1):
+                emails1.pop(i-1)
 
-    return emails1
+        for i in range(len(emails1)):
+            returndict.update({'email' + str(i+1):emails1[i]})
 
+        return returndict
+    except Exception as e:
+        print(e)
+        falseret=[]
+        return falseret
+
+async def fetch(url, session):
+    url=str(url).lower()
+    if (url.startswith("https://")):
+        url = "http://" + url[8:]
+        print (url)
+    elif (url.startswith("http://")):
+        pass
+    else:
+        url = "http://" + url
+    r = await session.get(url)
+    await r.html.arender()
+    return re.findall("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", r.html.html)
 
 if __name__ == "__main__":
-    #app.run(host='0.0.0.0', port=os.environ.get('PORT',5000))
+    #app.run(host='0.0.0.0', port=int(os.environ.get('PORT',5000)))
     app.run(debug=True)
