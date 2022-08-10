@@ -59,7 +59,7 @@ Quart==0.6.15
 queuelib==1.5.0
 requests==2.23.0
 requests-html==0.10.0
-Scrapy==2.1.0
+Scrapy==2.6.2
 service-identity==18.1.0
 six==1.14.0
 soupsieve==2.0
